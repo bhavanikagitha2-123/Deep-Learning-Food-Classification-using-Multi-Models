@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Food Classifier</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <h1>Food Classifier Dashboard</h1>
+    </div>
+  </header>
+
+  <div class="page container">
+
+    <!-- LEFT PANEL -->
+    <aside class="left-panel">
+      <div class="profile-card">
+        <div class="avatar-square">
+          <img
+  src="{{ url_for('static', filename='images/bhavani.jpg') }}"
+  alt="Bhavani Kagitha"
+  class="profile-img"
+/>
+
+
+        </div>
+        <h3>Bhavani Kagitha</h3>
+        <p class="subtitle">AI & ML Engineer</p>
+        <div class="skills">
+          <span>Python</span><span>ML</span><span>DL</span><span>Flask</span>
+        </div>
+      </div>
+
+      <div class="select-block">
+        <h4>Classes</h4>
+        <select id="class-dropdown">
+          <option value="">-- choose class --</option>
+          {% for c in classes %}
+          <option value="{{ c }}">{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="nutrition-card" id="nutrition-card">
+        <h4>Nutrition Details</h4>
+        <div id="nutrition-content">
+          <p style="color:#888;">Select a class to view nutrition info...</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER AREA -->
+    <main class="center-area">
+      <div class="image-card">
+        <div id="image-preview" class="image-preview">
+          {% if sample_image %}
+            <img id="main-img" src="{{ sample_image }}" alt="preview">
+          {% else %}
+            <div class="img-placeholder">Upload an image to preview</div>
+          {% endif %}
+        </div>
+        <div class="upload-row">
+          <input id="file-input" type="file" accept="image/*">
+        </div>
+
+        <div class="model-buttons">
+          <button class="model-btn" data-type="custom_model" id="btn-custom">Custom Model</button>
+          <button class="model-btn" data-type="resnet_model" id="btn-resnet">ResNet Model</button>
+          <button class="model-btn" data-type="vgg_model" id="btn-vgg">VGG Model</button>
+        </div>
+
+        <div class="predict-row">
+          <button id="predict-btn">Predict</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- RIGHT PANEL -->
+    <aside class="right-panel">
+      <h3>Prediction & Model Details</h3>
+      <div id="prediction-output" class="prediction-card">
+        <p style="color:#999">No predictions yet.</p>
+      </div>
+
+      <div class="metrics-card" id="metrics-card" style="display:none;">
+        <h4>Metrics</h4>
+        <div class="metric-grid">
+          <div><strong>Accuracy</strong><div id="m-accuracy">-</div></div>
+          <div><strong>Precision</strong><div id="m-precision">-</div></div>
+          <div><strong>Recall</strong><div id="m-recall">-</div></div>
+        </div>
+        <div class="f1"><strong>F1 Score</strong><div id="m-f1">-</div></div>
+      </div>
+
+      <div id="confusion" class="confusion-card" style="display:none;">
+        <h4>Confusion Matrix</h4>
+        <table id="confusion-table">
+          <thead><tr><th></th><th>C1</th><th>C2</th><th>C3</th></tr></thead>
+          <tbody>
+            <tr><th>R1</th><td id="cm-00">-</td><td id="cm-01">-</td><td id="cm-02">-</td></tr>
+            <tr><th>R2</th><td id="cm-10">-</td><td id="cm-11">-</td><td id="cm-12">-</td></tr>
+            <tr><th>R3</th><td id="cm-20">-</td><td id="cm-21">-</td><td id="cm-22">-</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <script>
+    // pass nutrition data into JS
+    const NUTRITION = {{ nutrition|tojson }};
+    const MODELS = {{ model_index|tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
